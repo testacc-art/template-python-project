@@ -1,0 +1,17 @@
+[run]
+branch = True
+omit =
+    .tox/*
+    build/*
+    data/*
+    dist/*
+    docs/*
+    *.egg-info
+source =
+    template_python_project/
+
+[report]
+fail_under = 80
+
+[html]
+directory = build/coverage

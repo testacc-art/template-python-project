@@ -1,0 +1,36 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+black = "~=21.5b1"
+coverage = "~=5.5"
+invoke = "~=1.5.0"
+mypy = "~=0.812"
+pytest = "~=6.2.4"
+Sphinx = "~=4.0.2"
+sphinx-rtd-theme = "~=0.5.2"
+tox = "~=3.23.1"
+twine = "~=3.4.1"
+
+[packages]
+fire = "~=0.4.0"
+
+[pipenv]
+allow_prereleases = true
+
+[scripts]
+build = "invoke build"
+clean = "invoke clean"
+docs = "invoke docs"
+help = "invoke -l"
+install = "invoke install"
+lint = "invoke lint"
+release = "invoke release"
+reset = "invoke reset"
+scan = "invoke scan"
+test = "invoke test"
+test37 = "invoke test37"
+test38 = "invoke test38"
+test39 = "invoke test39"
