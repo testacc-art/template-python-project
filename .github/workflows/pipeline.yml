@@ -12,14 +12,11 @@ jobs:
         os: [ ubuntu-20.04 ]
     name: Lint
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Lint
-        uses: psf/black@stable
+      - uses: psf/black@stable
   test:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -30,27 +27,28 @@ jobs:
     name: Test
     needs: lint
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Dependencies
-        run: |
+      - run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade pipenv==2021.5.29
           pipenv install --dev
-      - name: Test
-        if: ${{ contains(matrix.os, 'ubuntu') }}
-        run: |
+      - run: |
           PY_VERSION=`echo ${{ matrix.python-version }} | tr -d "."`
           pipenv run "test${PY_VERSION}"
-      - name: Test
-        if: ${{ contains(matrix.os, 'windows') }}
-        run: |
-          $PY_VERSION = "py${{ matrix.python-version }}" -replace "[.]", ""
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+      - run: |
+          $PY_VERSION = "${{ matrix.python-version }}" -replace "[.]", ""
+          pipenv run reset
           pipenv run "test${PY_VERSION}"
+        if: ${{ contains(matrix.os, 'windows') }}
+      - uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   scan:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -81,22 +79,17 @@ jobs:
     name: Build
     needs: [test, scan]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Dependencies
-        run: |
+      - run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade pipenv==2021.5.29
           pipenv install --dev
-      - name: Build
-        run: |
+      - run: |
           pipenv run build
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         with:
           name: build-artifacts
           path: |
@@ -112,32 +105,26 @@ jobs:
     name: Release
     needs: build
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v2
         with:
           name: build-artifacts
           path: dist/
-      - name: Install Dependencies
-        run: |
+      - run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade pipenv==2021.5.29
           pipenv install --dev
-      - name: Release Test
+      - run: |
+          pipenv run release --pypi-test
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME_TEST }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD_TEST }}
-        run: |
-          pipenv run release --pypi-test
-      - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
+      - run: |
+          pipenv run release
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: |
-          pipenv run release
+        if: startsWith(github.ref, 'refs/tags/')

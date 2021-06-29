@@ -18,7 +18,6 @@ from invoke import task
 from pathlib import Path
 from setuptools import find_packages
 from setuptools.config import read_configuration
-from typing import Any
 
 
 # #####################################################################################################################
@@ -41,28 +40,27 @@ IGNORE_PACKAGES = ["tests"]
 class Project:
     """A singleton class providing basic properties related to the project"""
 
-    _config: defaultdict[Any, dict]
-    _instance: Any = None
+    _instance = None
 
-    def __init__(self) -> None:
+    def __init__(self):
         self._config = read_configuration("setup.cfg")
 
-    def __new__(klass, *args, **kwargs) -> Any:
+    def __new__(klass, *args, **kwargs):
         if not isinstance(klass._instance, klass):
             klass._instance = object.__new__(klass, *args, **kwargs)
 
         return klass._instance
 
     @property
-    def config(self) -> defaultdict[Any, dict]:
+    def config(self):
         return self._config
 
     @property
-    def name(self) -> str:
+    def name(self):
         return self.config["metadata"]["name"]
 
     @property
-    def modules(self) -> list[str]:
+    def modules(self):
         return [module for module in find_packages() if module not in IGNORE_PACKAGES]
 
 
@@ -82,7 +80,10 @@ def clean(c):
     """Remove build files and directories"""
     c.run("python setup.py clean")
     c.run("coverage erase")
+    c.run("rm -f coverage.xml")
     c.run("rm -rf *.egg-info")
+    c.run("rm -rf .mypy_cache")
+    c.run("find . -type d -name '__pycache__' | grep -v '\./\.tox/' | xargs rm -rf")
     c.run(f"rm -rf {COVERAGE_REPORT_DIR}")
     c.run(f"rm -rf {DOCS_BUILD_DIR}")
     c.run(f"rm -rf {BUILD_DIR}/bdist.*")
@@ -122,7 +123,7 @@ def lint(c):
 @task(help={"pypi_test": "Release the package to PyPi Test service"})
 def release(c, pypi_test=False):
     """Release the package to PyPi"""
-    c.run(f"twine upload {'-r testpypi' if pypi_test else ''} dist/*")
+    c.run(f"twine upload {'-r testpypi --skip-existing' if pypi_test else ''} dist/*")
 
 
 @task(clean)
