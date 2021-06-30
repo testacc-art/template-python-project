@@ -203,6 +203,7 @@ got your back.
 
 Likewise any spamming, trolling, flaming, baiting or other attention-stealing behaviour is not welcome.
 
+
 Communication
 -------------
 
@@ -210,6 +211,9 @@ GitHub issues are the primary way for communicating about specific proposed chan
 
 In both contexts, please follow the conduct guidelines above. Language issues are often contentious and we'd like to
 keep discussion brief, civil and focused on what we're actually doing, not wandering off into too much imaginary stuff.
+
+You can also check the Trello board of all projects part of the Mundoalem organization `here <https://trello.com/b/KunkS6IP/all-mundoalem-projects>`_.
+
 
 FAQ
 ---
