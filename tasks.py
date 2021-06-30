@@ -121,9 +121,10 @@ def lint(c):
 
 
 @task(help={"pypi_test": "Release the package to PyPi Test service"})
-def release(c, pypi_test=False):
+def release(c, pypi_test=False, noop=False):
     """Release the package to PyPi"""
-    c.run(f"twine upload {'-r testpypi --skip-existing' if pypi_test else ''} dist/*")
+    if not noop:
+        c.run(f"twine upload {'-r testpypi --skip-existing' if pypi_test else ''} dist/*")
 
 
 @task(clean)

@@ -75,15 +75,15 @@ Tech Stack
 
 These are the software baked in this template:
 
-* Python 3.7, 3.8 and 3.9
-* black
-* coverage
-* invoke
-* mypy
-* pytest
-* Sphinx
-* tox
-* twine
+* `Python <https://www.python.org/>`_ 3.7, 3.8 and 3.9
+* `black <https://github.com/psf/black>`_
+* `coverage <https://github.com/nedbat/coveragepy>`_
+* `invoke <http://docs.pyinvoke.org/en/stable/>`_
+* `mypy <http://www.mypy-lang.org/>`_
+* `pytest <https://pypi.org/project/pytest/>`_
+* `Sphinx <https://www.sphinx-doc.org/en/master/>`_
+* `tox <https://tox.readthedocs.io/en/latest/>`_
+* `twine <https://twine.readthedocs.io/en/latest/>`_
 
 
 Usage
@@ -106,6 +106,7 @@ it may be better to make the project your own by:
 - Configure in `.coveragerc` the `source` property of your project (usually the name of the project).
 - Update test files under `tests` directory.
 - Make sure you are using the correct Python versions in the jobs configured in `.github/workflows`.
+- Make sure to remove the `--noop` argumento in the `release` step of the pipeline in `.github/workflows/pipeline.yml`
 - Update the `README.md` with your project information.
 
 All pipeline jobs can be also run locally by ivoking ``pipenv`` scripts, example:
