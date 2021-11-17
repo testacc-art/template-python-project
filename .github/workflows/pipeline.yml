@@ -28,7 +28,7 @@ jobs:
     needs: lint
     steps:
       - uses: actions/checkout@v2
-      - uses: dmitry-shibanov/setup-python@v-dmshib/add-cache-support
+      - uses: actions/setup-python@main
         with:
           python-version: ${{ matrix.python-version }}
           cache: pipenv
@@ -61,7 +61,7 @@ jobs:
     needs: lint
     steps:
       - uses: actions/checkout@v2
-      - uses: dmitry-shibanov/setup-python@v-dmshib/add-cache-support
+      - uses: actions/setup-python@main
         with:
           python-version: ${{ matrix.python-version }}
           cache: pipenv
@@ -85,7 +85,7 @@ jobs:
     needs: [test, scan]
     steps:
       - uses: actions/checkout@v2
-      - uses: dmitry-shibanov/setup-python@v-dmshib/add-cache-support
+      - uses: actions/setup-python@main
         with:
           python-version: ${{ matrix.python-version }}
           cache: pipenv
