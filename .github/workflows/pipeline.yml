@@ -45,11 +45,11 @@ jobs:
           pipenv run reset
           pipenv run "test${PY_VERSION}"
         if: ${{ contains(matrix.os, 'windows') }}
-      - uses: codecov/codecov-action@v1
-        with:
-          fail_ci_if_error: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+#       - uses: codecov/codecov-action@v1
+#         with:
+#           fail_ci_if_error: true
+#         env:
+#           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   scan:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -69,11 +69,11 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade pipenv==2021.5.29
           pipenv install --dev
-      - uses: snyk/actions/python@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --fail-on=upgradable
+#       - uses: snyk/actions/python@master
+#         env:
+#           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+#         with:
+#           args: --fail-on=upgradable
   build:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -95,12 +95,12 @@ jobs:
           pipenv install --dev
       - run: |
           pipenv run build
-      - uses: actions/upload-artifact@v2
-        with:
-          name: build-artifacts
-          path: |
-            dist/*.tar.gz
-            dist/*.whl
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: build-artifacts
+#           path: |
+#             dist/*.tar.gz
+#             dist/*.whl
 #   release:
 #     runs-on: ${{ matrix.os }}
 #     strategy:
